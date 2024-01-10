@@ -1,30 +1,14 @@
 # ood-device-sdk
 
 #### 介绍
-常见监控设备SDK接口工具，目前主要对接海康、大华，后续对接更多
+常见监控设备SDK接口工具，目前主要对接海康、大华，后续对接更多。
 
 #### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+引用lombok、hutool、jna、第三方库
 
 #### 使用说明
 
-1.  海康SDK，采用6.1.6.45版本，支持win64和linux
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+1.  海康SDK，采用6.1.6.45版本，支持win64和linux。通过HikDeviceUtil获取海康设备SDK
 
 
 #### 特技
