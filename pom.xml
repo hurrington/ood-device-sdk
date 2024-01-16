@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>device-webcam-hik</module>
-        <module>device-webcam-dh</module>
+        <module>device-hik</module>
+        <module>device-dh</module>
         <module>device-core</module>
     </modules>
 
