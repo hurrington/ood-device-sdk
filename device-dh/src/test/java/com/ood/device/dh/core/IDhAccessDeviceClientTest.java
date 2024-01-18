@@ -12,7 +12,7 @@ public class IDhAccessDeviceClientTest {
 
     @Before
     public void setUp() {
-        dhClient = DhAccessDeviceFactory.getDhClient();
+        dhClient = DhAccessDeviceFactory.getAccessDeviceClient();
         dhClient.setLogPath("C:\\Users\\dbg\\Desktop");
         ResultData init = dhClient.init(WIN_DLL + "\\dhnetsdk.dll", WIN_DLL + "\\dhconfigsdk.dll");
         Assert.assertTrue("初始化", init.isSuccess());
