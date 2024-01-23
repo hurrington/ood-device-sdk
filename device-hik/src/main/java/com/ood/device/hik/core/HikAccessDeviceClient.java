@@ -9,7 +9,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -85,10 +84,7 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
      */
     @Override
     public boolean isInit() {
-        if (hCNetSDK != null) {
-            return true;
-        }
-        return false;
+        return hCNetSDK != null;
     }
 
     // 反序列化定义该方法，则不需要创建新对象
@@ -1426,7 +1422,7 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
                         + "}";
         String deleteUserUrl = "PUT /ISAPI/AccessControl/UserInfoDetail/Delete?format=json";
         String result = TransIsapi.put_isapi(userID, deleteUserUrl, deleteUserjson, hCNetSDK);
-        System.out.println(result);
+        log.debug(result);
         // 获取删除进度
         while (true) {
             String getDeleteProcessUrl =
@@ -1435,9 +1431,9 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
             JSONObject jsonObject = new JSONObject(deleteResult);
             JSONObject jsonObject1 = jsonObject.getJSONObject("UserInfoDetailDeleteProcess");
             String process = jsonObject1.getStr("status");
-            System.out.println("process =" + process);
+            log.debug("process =" + process);
             if (process.equals("processing")) {
-                System.out.println("正在删除");
+                log.debug("正在删除");
                 continue;
             } else if (process.equals("success")) {
                 resultData = ResultData.success("删除成功");
@@ -1951,7 +1947,7 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
                 personInformation.setDateTime(datetime.toString());
                 stringList.add(personInformation);
 
-                System.out.print(
+                log.debug(
                         "获取卡参数成功, 时间: "
                                 + struEventRecord.struTime.dwYear
                                 + "-"
@@ -2271,12 +2267,12 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
         boolean res = hCNetSDK.NET_DVR_ManualSnap(lUserID, struManualParam, struPlateResult);
         struPlateResult.pBuffer1 = struPlateResult.getPointer();
 
-        System.out.println(
+        log.debug(
                 "图片长度：" + struPlateResult.dwPicLen + "\t车牌图片长度：" + struPlateResult.dwPicPlateLen);
         if (!res) { // 单帧数据捕获图片
-            System.out.println("抓拍失败!" + " err: " + hCNetSDK.NET_DVR_GetLastError());
+            log.debug("抓拍失败!" + " err: " + hCNetSDK.NET_DVR_GetLastError());
         } else {
-            System.out.println("抓拍成功");
+            log.debug("抓拍成功");
             struPlateResult.read();
 
             // 抓拍全图
@@ -3315,16 +3311,10 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
                     monitorEventEntity.setFilePath(filePath);
 
                     // 记录事件
-                    IHikEventCallBackHandle hikEventCallBackHandle = SpringUtil.getBean(IHikEventCallBackHandle.class);
-                    if (hikEventCallBackHandle != null) {
-                        hikEventCallBackHandle.handle(JSONUtil.toJsonStr(monitorEventEntity));
-                    }
                     if (StrUtil.isNotBlank(getCallBackUrl())) {
                         try {
-                            String post =
-                                    HttpUtil.post(
-                                            getCallBackUrl(), JSONUtil.toJsonStr(monitorEventEntity));
-                            System.out.println("回调结果：" + post);
+                            String post = HttpUtil.post(getCallBackUrl(), JSONUtil.toJsonStr(monitorEventEntity));
+                            log.debug("回调结果：" + post);
                         } catch (Exception e) {
                             log.error("门禁事件回调地址异常！" + e.getMessage());
                         }

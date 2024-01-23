@@ -4,11 +4,12 @@
     <parent>
         <groupId>com.ood</groupId>
         <artifactId>device-sdk</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>device-dh</artifactId>
-    <name>dh-webcam</name>
-    <url>http://maven.apache.org</url>
+    <name>device-dh</name>
+    <description>大华监控设备SDK</description>
+
     <dependencies>
         <dependency>
             <groupId>com.ood</groupId>

@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.ood</groupId>
         <artifactId>device-sdk</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>device-core</artifactId>
