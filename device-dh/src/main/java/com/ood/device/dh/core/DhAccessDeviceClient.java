@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.log.Log;
 import com.ood.core.entity.ResultData;
@@ -1048,18 +1047,6 @@ public class DhAccessDeviceClient implements IDhAccessDeviceClient {
                     log.debug(msg.toString());
                     break;
                 }
-            }
-            IDhEventCallBackHandle bean = SpringUtil.getBean(IDhEventCallBackHandle.class);
-            if (bean != null) {
-                ALARM_ACCESS_CTL_EVENT_INFO msg = new ALARM_ACCESS_CTL_EVENT_INFO();
-                ToolKits.GetPointerData(pStuEvent, msg);
-                bean.handle(
-                        JSONUtil.createObj()
-                                .set("employeeNo", new String(msg.szUserID))
-                                .set("cardNo", new String(msg.szCardNo))
-                                .set("eventType", msg.emEventType)
-                                .set("status", msg.bStatus).set("date", msg.stuTime.toStringTimeEx())
-                                .toString());
             }
 
             return true;
