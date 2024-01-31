@@ -117,4 +117,13 @@ public class IDhAccessDeviceClientTest {
         Assert.assertTrue("清空人员",result2.isSuccess());
     }
 
+    @Test
+    @Ignore
+    public void manualSnap(){
+        String filePath= "C:\\Users\\dbg\\Desktop\\testSnap.png";
+        ResultData resultData = this.dhClient.manualSnap(login, filePath);
+        Assert.assertTrue("抓拍",resultData.isSuccess());
+    }
+
+
 }
