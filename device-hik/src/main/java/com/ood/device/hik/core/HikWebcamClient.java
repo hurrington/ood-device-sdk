@@ -21,8 +21,6 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
 
     private static final HikWebcamClient singleton = new HikWebcamClient();
     static PlayCtrl playControl;
-    // 用户句柄
-    static Map<String, Integer> lUserIDMap = new HashMap<>();
     static Map<String, Integer> lPlayMap = new HashMap<>();
     static IntByReference m_lPort = new IntByReference(-1);
     public Map<String, FRealDataCallBack> fRealDataCallBackMap = new HashMap<>(); // 报警回调函数实现
@@ -78,6 +76,27 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
             generateLogsRegularly();
         }
         return init ? ResultData.success() : ResultData.error();
+    }
+
+    /**
+     * 注销SDK
+     *
+     * @return 注销SDK
+     */
+    @Override
+    public ResultData stop() {
+        try {
+            if (hCNetSDK != null) {
+                hCNetSDK.NET_DVR_Cleanup();
+            }
+            if (playControl != null) {
+                playControl.PlayM4_Stop(m_lPort.getValue());
+            }
+        } catch (Exception e) {
+            log.error("注销SDK失败", e);
+            return ResultData.error("注销SDK失败");
+        }
+        return ResultData.success();
     }
 
     /**

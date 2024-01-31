@@ -28,6 +28,13 @@ public interface IHikWebcamClient extends IHikDevice {
 	ResultData init(String hcNetSDKDllPath, String playControlDllPath);
 
 	/**
+	 * 注销SDK
+	 *
+	 * @return 注销SDK
+	 */
+	ResultData stop();
+
+	/**
 	 * 设备登陆
 	 * @param username 用户名
 	 * @param password 密码

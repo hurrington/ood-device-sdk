@@ -10,22 +10,32 @@ public class IDhAccessDeviceClientTest {
     private IDhAccessDeviceClient dhClient;
     private String login;
 
+    /**
+     * 初始化和登录
+     */
     @Before
     public void setUp() {
         dhClient = DhAccessDeviceFactory.getAccessDeviceClient();
-        dhClient.setLogPath("C:\\Users\\dbg\\Desktop");
+        //开启日志
+//        dhClient.setLogPath("C:\\Users\\dbg\\Desktop");
+        //初始化SDK
         ResultData init = dhClient.init(WIN_DLL + "\\dhnetsdk.dll", WIN_DLL + "\\dhconfigsdk.dll");
         Assert.assertTrue("初始化", init.isSuccess());
-
+        //登录
         ResultData loginR = dhClient.login("admin", "pppppp000", "192.168.1.171", 37777);
         Assert.assertTrue("登录", loginR.isSuccess());
         login = (String) loginR.getData();
     }
 
+    /**
+     * 退出登录
+     */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         ResultData logout = dhClient.logout(login);
         Assert.assertTrue("测试结束", logout.isSuccess());
+        ResultData stop = dhClient.stop();
+        Assert.assertTrue("注销SDK", stop.isSuccess());
     }
 
     @Test
@@ -50,7 +60,7 @@ public class IDhAccessDeviceClientTest {
     @Test
     @Ignore
     public void addUser() {
-        String employeeNo = "ENGLISH01";
+        String employeeNo = "TEST001";
         ResultData result =
                 dhClient.addUser(login, employeeNo, "测试员", "normal", null, null);
         Assert.assertTrue("新增用户", result.isSuccess());
@@ -59,7 +69,7 @@ public class IDhAccessDeviceClientTest {
     @Test
     @Ignore
     public void searchUser() {
-        String employeeNo = "ENGLISH01";
+        String employeeNo = "TEST001";
         ResultData result1 =
                 dhClient.searchUser(login, new String[]{employeeNo}, 1, 100);
         Assert.assertTrue("查询用户", result1.isSuccess());

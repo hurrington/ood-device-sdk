@@ -29,7 +29,9 @@ public class HikAccessDeviceClientTest {
     @After
     public void closeSdk() {
         ResultData logout = hikClient.logout(login);
-        Assert.assertTrue(logout.isSuccess());
+        Assert.assertTrue("退出登录",logout.isSuccess());
+        ResultData stop = hikClient.stop();
+        Assert.assertTrue("注销SDK",stop.isSuccess());
     }
 
 

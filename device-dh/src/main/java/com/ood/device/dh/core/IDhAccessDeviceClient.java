@@ -32,6 +32,8 @@ public interface IDhAccessDeviceClient extends Serializable {
      */
     ResultData init(String dhnetsdkPath, String dhconfigsdkPath);
 
+    ResultData stop();
+
     /**
      * 设备登陆
      */

@@ -18,23 +18,30 @@ public interface IHikAccessDeviceClient extends IHikDevice {
 	 */
 	boolean isInit();
 
-    public void setEventFilePath(String eventFilePath);
+    void setEventFilePath(String eventFilePath);
 
-    public void setCallBackUrl(String callBackUrl);
+    void setCallBackUrl(String callBackUrl);
 
-    public void setLogPath(String logPath);
+    void setLogPath(String logPath);
 
-    public ResultData init(String dllPath);
+    ResultData init(String dllPath);
+
+    /**
+     * 注销SDK
+     *
+     * @return 注销SDK
+     */
+    ResultData stop();
 
     /**
      * 设备登陆
      */
-    public ResultData login(String username, String password, String ip, int port);
+    ResultData login(String username, String password, String ip, int port);
 
     /**
      * 设备注销
      */
-    public ResultData logout(String uuid);
+    ResultData logout(String uuid);
 
     /**
      * 查询卡号
@@ -42,14 +49,14 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param cardNo 卡号
      * @return 结果
      */
-    public ResultData getOneCard(String uuid, String cardNo);
+    ResultData getOneCard(String uuid, String cardNo);
 
     /**
      * 获取所有人员卡信息
      *
      * @return 返回list
      */
-    public ResultData getAllCard(String uuid, Integer pageSize, Integer pageNum);
+    ResultData getAllCard(String uuid, Integer pageSize, Integer pageNum);
 
     /**
      * 下发
@@ -59,7 +66,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param employeeNo 人员编号
      * @return 返回状态码
      */
-    public ResultData setOneCard(String uuid, String cardNo, String cardName, int employeeNo, String userType, String beginTime, String endTime);
+    ResultData setOneCard(String uuid, String cardNo, String cardName, int employeeNo, String userType, String beginTime, String endTime);
 
     /**
      * 下发人脸
@@ -68,7 +75,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param file  图片
      * @return 返回状态码
      */
-    public ResultData setOneCardFace(String uuid, String carNo, File file);
+    ResultData setOneCardFace(String uuid, String carNo, File file);
 
     /**
      * 删除人脸
@@ -76,7 +83,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param cardNo 卡号
      * @return 结果
      */
-    public ResultData delOneCardFace(String uuid, String cardNo);
+    ResultData delOneCardFace(String uuid, String cardNo);
 
     /**
      * 删除卡号
@@ -84,7 +91,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param cardNo 卡号
      * @return 结果
      */
-    public ResultData delOneCard(String uuid, String cardNo);
+    ResultData delOneCard(String uuid, String cardNo);
 
     /**
      * 手动抓拍
@@ -92,7 +99,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param filePath 输出抓拍地址
      * @return 结果
      */
-    public ResultData manualSnap(String uuid, String filePath);
+    ResultData manualSnap(String uuid, String filePath);
 
 	ResultData controlGateway(String uuid);
 
@@ -104,7 +111,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      *                     恢复（梯控，普通状态），5- 访客呼梯（梯控），6- 住户呼梯（梯控）
      * @return 结果
      */
-    public ResultData controlGateway(String uuid, int gatewayIndex, int operateType);
+    ResultData controlGateway(String uuid, int gatewayIndex, int operateType);
 
     /**
      * 以人为中心 添加人
@@ -114,7 +121,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param beginTime  开始时间 eg：2017-08-01T17:30:08
      * @param userType   人员类型 员工normal（默认） 访客visitor
      */
-    public ResultData addUser(String uuid, String employeeNo, String name, String userType, Date beginTime, Date endTime);
+    ResultData addUser(String uuid, String employeeNo, String name, String userType, Date beginTime, Date endTime);
 
     /**
      * 修改人员信息
@@ -124,7 +131,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param userType   人员类型
      * @param beginTime  开始时间（门禁权限）
      */
-    public ResultData modifyUser(String uuid, String employeeNo, String name, String userType, Date beginTime);
+    ResultData modifyUser(String uuid, String employeeNo, String name, String userType, Date beginTime);
 
     /**
      * 以人为中心 删除人 <br>
@@ -133,7 +140,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param employeeNo 人员编号
      * @return 结果
      */
-    public ResultData delUser(String uuid, String employeeNo);
+    ResultData delUser(String uuid, String employeeNo);
 
     /**
      * 以人为中心 删除人脸 <br>
@@ -141,7 +148,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      *
      * @param employeeNo 人员编号
      */
-    public ResultData delUserFace(String uuid, String employeeNo);
+    ResultData delUserFace(String uuid, String employeeNo);
 
     /**
      * 以人为中心 添加人脸
@@ -149,7 +156,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param employeeNo 人员编号
      * @param filePath   文件地址
      */
-    public ResultData addUserFace(String uuid, String employeeNo, String filePath);
+    ResultData addUserFace(String uuid, String employeeNo, String filePath);
 
 	ResultData addUserFace(String uuid, String employeeNo, FileInputStream file);
 
@@ -159,7 +166,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param employeeNos 人员编号（可以为空）
      * @return 结果
      */
-    public ResultData searchUser(String uuid, String[] employeeNos, Integer pageSize, Integer pageNum);
+    ResultData searchUser(String uuid, String[] employeeNos, Integer pageSize, Integer pageNum);
 
     /**
      * 获取事件 （人脸打卡）
@@ -168,7 +175,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param dateType 日期类型 month day
      * @return 结果
      */
-    public ResultData getEventRecord(String uuid, String dateStr, String dateType);
+    ResultData getEventRecord(String uuid, String dateStr, String dateType);
 
     /**
      * 查询人脸
@@ -177,7 +184,7 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param filePath   保存路径路径
      * @return 结果
      */
-    public ResultData searchFaceInfo(String uuid, String employeeNo, String filePath);
+    ResultData searchFaceInfo(String uuid, String employeeNo, String filePath);
 
     /**
      * 以人为中心 添加卡
@@ -187,21 +194,21 @@ public interface IHikAccessDeviceClient extends IHikDevice {
      * @param isDeleteCard 是否删除该卡
      * @param cardType   卡类型 默认 normalCard-普通卡
      */
-    public ResultData updateCard(String uuid, String employeeNo, String cardNo, boolean isDeleteCard, String cardType);
+    ResultData updateCard(String uuid, String employeeNo, String cardNo, boolean isDeleteCard, String cardType);
 
-    public ResultData carManualSnap(String uuid, String filePath);
+    ResultData carManualSnap(String uuid, String filePath);
 
     /**
      * 撤防
      */
-    public ResultData closeAlarmChan(String uuid);
+    ResultData closeAlarmChan(String uuid);
 
     /**
      * 设防
      *
      * @param uuid 登陆id
      */
-    public ResultData setupAlarmChan(String uuid);
+    ResultData setupAlarmChan(String uuid);
 
 	/**
 	 * 清空人员

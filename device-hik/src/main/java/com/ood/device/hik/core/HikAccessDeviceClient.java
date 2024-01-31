@@ -87,6 +87,24 @@ public class HikAccessDeviceClient extends AbstractHikDevice implements IHikAcce
         return hCNetSDK != null;
     }
 
+    /**
+     * 注销SDK
+     *
+     * @return 注销SDK
+     */
+    @Override
+    public ResultData stop() {
+        try {
+            if (hCNetSDK!=null){
+                hCNetSDK.NET_DVR_Cleanup();
+            }
+        } catch (Exception e) {
+            log.error("注销SDK失败",e);
+            return ResultData.error("注销SDK");
+        }
+        return ResultData.success();
+    }
+
     // 反序列化定义该方法，则不需要创建新对象
     private Object readResolve() throws ObjectStreamException {
         return singleton;

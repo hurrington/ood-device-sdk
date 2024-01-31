@@ -77,20 +77,6 @@ public class DhAccessDeviceClient implements IDhAccessDeviceClient {
         return false;
     }
 
-    @Override
-    public void setEventFilePath(String eventFilePath) {
-        this.eventFilePath = eventFilePath;
-    }
-
-    public String getCallBackUrl() {
-        return callBackUrl;
-    }
-
-    @Override
-    public void setCallBackUrl(String callBackUrl) {
-        this.callBackUrl = callBackUrl;
-    }
-
     //反序列化定义该方法，则不需要创建新对象
     private Object readResolve() throws ObjectStreamException {
         return singleton;
@@ -111,6 +97,24 @@ public class DhAccessDeviceClient implements IDhAccessDeviceClient {
             generateLogsRegularly();
         }
         return ResultData.success(init);
+    }
+
+    /**
+     * 注销SDK
+     *
+     * @return 结果
+     */
+    @Override
+    public ResultData stop() {
+        try {
+            if (netsdkApi != null) {
+                netsdkApi.CLIENT_Cleanup();
+            }
+        } catch (Exception e) {
+            log.error("注销SDK失败",e);
+            return ResultData.error("注销SDK失败");
+        }
+        return ResultData.success();
     }
 
     /**
