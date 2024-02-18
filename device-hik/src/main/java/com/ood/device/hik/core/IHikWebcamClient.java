@@ -2,8 +2,6 @@ package com.ood.device.hik.core;
 
 import com.ood.core.entity.ResultData;
 
-import java.util.HashMap;
-
 /**
  * 网络监控
  *
@@ -51,17 +49,40 @@ public interface IHikWebcamClient extends IHikDevice {
 	 */
 	ResultData logout(String uuid);
 
-	boolean realPlay(String uuid,boolean needCallBack);
+	/**
+	 * 开启视频录制
+	 *
+	 * @param uuid         设备登录ID
+	 * @param needCallBack 是否需要回调流
+	 * @return 开启视频录制
+	 */
+	ResultData realPlay(String uuid, boolean needCallBack);
 
-	boolean stopRealPlay(String uuid);
+	/**
+	 * 停止视频录制
+	 *
+	 * @param uuid 设备登录ID
+	 * @return 停止视频录制
+	 */
+	ResultData stopRealPlay(String uuid);
 
 	/**
 	 * 保存实时录像
 	 *
-	 * @param uuid
+	 * @param uuid 设备登录ID
 	 * @param filePath 文件路径
-	 * @param duration
+	 * @param duration 录制时长
 	 * @return 结果
 	 */
-	HashMap<String, Object> saveRealData(String uuid, String filePath, int duration);
+	ResultData saveRealData(String uuid, String filePath, long duration);
+
+	/**
+	 * 定时抓拍
+	 *
+	 * @param uuid 设备登录ID
+	 * @param filePath 文件路径
+	 * @param duration 抓拍间隔
+	 * @return 结果
+	 */
+	ResultData timedSnapshot(String uuid, String filePath, long duration);
 }

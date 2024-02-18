@@ -45,9 +45,25 @@ public class HikWebcamClientTest {
     @Ignore
     public void saveRealData() {
         String filePath = "C:\\Users\\dbg\\Desktop\\testHik.mp4";
-        HashMap<String, Object> resultData = webcamClient.saveRealData(login, filePath, 11);
-        webcamClient.stopRealPlay(login);
+        ResultData saveRealData = webcamClient.saveRealData(login, filePath, 11*1000L);
+        Assert.assertTrue("保存录像",saveRealData.isSuccess());
+        ResultData resultData = webcamClient.stopRealPlay(login);
+        Assert.assertTrue("退出登录",resultData.isSuccess());
     }
+
+    /**
+     * 定时抓拍
+     */
+    @Test
+    @Ignore
+    public void timedSnapshot(){
+        String filePath = "C:\\Users\\dbg\\Desktop\\testHik.jpeg";
+        ResultData resultData = webcamClient.timedSnapshot(login, filePath, 11*1000L);
+        webcamClient.stopRealPlay(login);
+        Assert.assertTrue("定时抓拍",resultData.isSuccess());
+    }
+
+
 
     /**
      * 视频转码
