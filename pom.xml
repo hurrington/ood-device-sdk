@@ -12,6 +12,7 @@
         <module>device-hik</module>
         <module>device-dh</module>
         <module>device-core</module>
+        <module>device-face</module>
     </modules>
 
     <properties>
