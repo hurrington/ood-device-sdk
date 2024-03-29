@@ -16,10 +16,12 @@
 lombok:1.18.30
 hutool:5.8.25
 jna-platform:5.13.0
+arcsoft-sdk-face:3.0.0.0
 
 #### 使用说明
 1.  海康SDK，采用6.1.6.45版本，支持win64和linux64。通过HikDeviceUtil获取海康设备SDK
 2.  大华SDK，采用3.057版本，支持win64和linux64。通过DhDeviceUtil获取大华设备SDK
 3.  需要先使用调用init初始化SDK，再调用登录login，使用其他功能接口
+4.  虹软人脸识别
 
 更多设备调试可联系邮箱hurrington_z@foxmail.com

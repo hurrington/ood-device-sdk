@@ -7,7 +7,7 @@ import com.ood.device.face.core.IFaceEngine;
 /**
  * 人脸识别工具
  *
- * @author dbg
+ * @author 西某川
  * @date 2024/03/27
  */
 public class FaceEngineUtil {

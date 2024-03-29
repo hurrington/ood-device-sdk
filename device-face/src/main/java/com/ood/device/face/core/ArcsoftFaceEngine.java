@@ -24,17 +24,19 @@ import static com.arcsoft.face.toolkit.ImageFactory.getRGBData;
 /**
  * 虹软人脸
  *
- * @author dbg
+ * @author 西某川
  * @date 2024/03/27
  */
 public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
 
-    FaceEngine faceEngine;
+    private FaceEngine faceEngine;
     private String appId;
     private String sdkKey;
     private String libPath;
 
-    private HashMap<String, byte[]> faceFeatureMap;
+    private EngineConfiguration engineConfiguration;
+
+    private final HashMap<String, byte[]> faceFeatureMap = new HashMap<>();
     private static final ArcsoftFaceEngine singleton = new ArcsoftFaceEngine();
 
     public static ArcsoftFaceEngine getInstance() {
@@ -58,7 +60,7 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
      */
     @Override
     public ResultData init() {
-        if (StrUtil.hasBlank(appId, sdkKey, libPath)) {
+        if (StrUtil.hasBlank(appId, sdkKey, libPath) || engineConfiguration == null) {
             return ResultData.error("请先执行setConfig配置参数");
         }
         faceEngine = new FaceEngine(libPath);
@@ -68,6 +70,8 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         if (errorCode != ErrorInfo.MOK.getValue() && errorCode != ErrorInfo.MERR_ASF_ALREADY_ACTIVATED.getValue()) {
             return ResultData.error("引擎激活失败");
         }
+        errorCode = faceEngine.init(engineConfiguration);
+
         return ResultData.success(errorCode);
     }
 
@@ -95,7 +99,7 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         libPath = arcsoftConfig.getLibPath();
 
         //引擎配置
-        EngineConfiguration engineConfiguration = new EngineConfiguration();
+        engineConfiguration = new EngineConfiguration();
         engineConfiguration.setDetectMode(DetectMode.ASF_DETECT_MODE_IMAGE);
         engineConfiguration.setDetectFaceOrientPriority(DetectOrient.ASF_OP_ALL_OUT);
         engineConfiguration.setDetectFaceMaxNum(10);
@@ -110,7 +114,7 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         functionConfiguration.setSupportLiveness(true);
         functionConfiguration.setSupportIRLiveness(true);
         engineConfiguration.setFunctionConfiguration(functionConfiguration);
-        faceEngine.init(engineConfiguration);
+
         return ResultData.success();
     }
 
@@ -125,7 +129,7 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         ImageInfo imageInfo = getRGBData(face);
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
         int errorCode = faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);
-        Log.get().debug("人脸识别结果：?", errorCode);
+        Log.get().debug("人脸识别结果：{}", errorCode);
         return ResultData.success(faceInfoList);
     }
 
@@ -140,14 +144,14 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         FaceFeature faceFeature = new FaceFeature();
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
         int detectFacesFlag = faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);
-        Log.get().debug("人脸识别结果：？", detectFacesFlag);
+        Log.get().debug("人脸识别结果：{}", detectFacesFlag);
         int extractFaceFeatureFlag = faceEngine.extractFaceFeature(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList.get(0), faceFeature);
-        Log.get().debug("特征值获取结果：？", extractFaceFeatureFlag);
-        Log.get().debug("特征值大小：?", faceFeature.getFeatureData().length);
+        Log.get().debug("特征值获取结果：{}", extractFaceFeatureFlag);
+        Log.get().debug("特征值大小：{}", faceFeature.getFeatureData().length);
         if (ObjectUtil.isNotEmpty(faceFeature.getFeatureData())) {
             String faceId = IdUtil.nanoId();
             faceFeatureMap.put(faceId, faceFeature.getFeatureData());
-            return ResultData.success(faceId);
+            return ResultData.success((Object) faceId);
         }
         return ResultData.error("特征提取失败");
     }
@@ -165,8 +169,8 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
         sourceFaceFeature.setFeatureData(faceFeatureMap.get(faceId2));
         FaceSimilar faceSimilar = new FaceSimilar();
         int compareFaceFeatureFlag = faceEngine.compareFaceFeature(targetFaceFeature, sourceFaceFeature, faceSimilar);
-        Log.get().debug("特征比对结果：?", compareFaceFeatureFlag);
-        Log.get().debug("相似度：" + faceSimilar.getScore());
+        Log.get().debug("特征比对结果：{}", compareFaceFeatureFlag);
+        Log.get().debug("相似度：{}", faceSimilar.getScore());
         return ResultData.success(faceSimilar.getScore());
     }
 }

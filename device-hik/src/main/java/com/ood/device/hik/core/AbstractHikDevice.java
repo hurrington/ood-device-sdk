@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * 海康设备虚拟类
  *
- * @author dbg
+ * @author 西某川
  * @date 2024/01/10
  */
 public abstract class AbstractHikDevice implements IHikDevice {

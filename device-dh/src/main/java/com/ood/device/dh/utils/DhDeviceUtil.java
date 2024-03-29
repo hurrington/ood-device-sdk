@@ -6,7 +6,7 @@ import com.ood.device.dh.core.IDhAccessDeviceClient;
 /**
  * 大华工具
  *
- * @author dbg
+ * @author 西某川
  * @date 2024/01/18
  */
 public class DhDeviceUtil {
