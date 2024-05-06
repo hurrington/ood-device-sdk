@@ -6,7 +6,6 @@ import org.junit.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HikWebcamClientTest {
@@ -98,6 +97,18 @@ public class HikWebcamClientTest {
         //等待转码时间
         Thread.sleep(2000L);
         Assert.assertTrue("生成文件失败", FileUtil.exist(outputPath));
+    }
+
+    @Test
+    @Ignore
+    public void faceCheck() {
+        //TODO 定时截图获取人脸比较实际
+        String filePath = "C:\\Users\\dbg\\Desktop\\testHik.jpeg";
+//        ResultData resultData = webcamClient.realPlay(login);
+//        webcamClient.stopRealPlay(login);
+//        Assert.assertTrue("视频流解释失败", resultData.isSuccess());
+
+
     }
 
 

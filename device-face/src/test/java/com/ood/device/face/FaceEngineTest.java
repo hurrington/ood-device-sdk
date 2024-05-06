@@ -46,7 +46,7 @@ public class FaceEngineTest {
 
 
     /**
-     * 设置SDK日志
+     * 人脸1对1比对
      */
     @Test
     @Ignore

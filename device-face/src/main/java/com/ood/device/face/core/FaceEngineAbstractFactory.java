@@ -4,6 +4,7 @@ import com.ood.core.entity.ResultData;
 import com.ood.device.face.entity.IFaceEngineConfig;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * 人脸
@@ -77,4 +78,25 @@ public abstract class FaceEngineAbstractFactory implements IFaceEngine {
     public ResultData compareFace(String faceId1, String faceId2) {
         return null;
     }
+
+    @Override
+    public ResultData detectFace(byte[] face) {
+        return null;
+    }
+
+    @Override
+    public ResultData detectFace(InputStream face) {
+        return null;
+    }
+
+    @Override
+    public ResultData extractFace(byte[] face) {
+        return null;
+    }
+
+    @Override
+    public ResultData extractFace(InputStream face) {
+        return null;
+    }
+
 }

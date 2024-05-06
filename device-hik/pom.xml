@@ -20,6 +20,12 @@
             <groupId>com.ood</groupId>
             <artifactId>device-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ood</groupId>
+            <artifactId>device-face</artifactId>
+            <version>1.0.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

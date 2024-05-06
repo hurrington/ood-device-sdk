@@ -52,11 +52,12 @@ public interface IHikWebcamClient extends IHikDevice {
 	/**
 	 * 开启视频录制
 	 *
-	 * @param uuid         设备登录ID
-	 * @param needCallBack 是否需要回调流
+	 * @param uuid              设备登录ID
+	 * @param needCallBack      是否需要回调流
+	 * @param fRealDataCallBack 视频流回调
 	 * @return 开启视频录制
 	 */
-	ResultData realPlay(String uuid, boolean needCallBack);
+	ResultData realPlay(String uuid, boolean needCallBack, HCNetSDK.FRealDataCallBack_V30 fRealDataCallBack);
 
 	/**
 	 * 停止视频录制

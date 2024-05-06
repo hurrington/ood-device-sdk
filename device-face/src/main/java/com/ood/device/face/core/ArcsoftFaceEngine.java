@@ -14,6 +14,7 @@ import com.ood.device.face.entity.ArcsoftConfig;
 import com.ood.device.face.entity.IFaceEngineConfig;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,9 +127,22 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
      */
     @Override
     public ResultData detectFace(File face) {
-        ImageInfo imageInfo = getRGBData(face);
+        return detectFaceHandle(getRGBData(face));
+    }
+
+    @Override
+    public ResultData detectFace(byte[] face) {
+        return detectFaceHandle(getRGBData(face));
+    }
+
+    @Override
+    public ResultData detectFace(InputStream face) {
+        return detectFaceHandle(getRGBData(face));
+    }
+
+    private ResultData detectFaceHandle(ImageInfo rgbData) {
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
-        int errorCode = faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);
+        int errorCode = faceEngine.detectFaces(rgbData.getImageData(), rgbData.getWidth(), rgbData.getHeight(), rgbData.getImageFormat(), faceInfoList);
         Log.get().debug("人脸识别结果：{}", errorCode);
         return ResultData.success(faceInfoList);
     }
@@ -140,7 +154,20 @@ public class ArcsoftFaceEngine extends FaceEngineAbstractFactory {
      */
     @Override
     public ResultData extractFace(File face) {
-        ImageInfo imageInfo = getRGBData(face);
+        return extractFaceHandle(getRGBData(face));
+    }
+
+    @Override
+    public ResultData extractFace(byte[] face) {
+        return extractFaceHandle(getRGBData(face));
+    }
+
+    @Override
+    public ResultData extractFace(InputStream face) {
+        return extractFaceHandle(getRGBData(face));
+    }
+
+    private ResultData extractFaceHandle(ImageInfo imageInfo) {
         FaceFeature faceFeature = new FaceFeature();
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
         int detectFacesFlag = faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);

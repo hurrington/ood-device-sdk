@@ -5,8 +5,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.log.Log;
 import com.ood.core.entity.ResultData;
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
 
 import java.nio.charset.StandardCharsets;
@@ -104,14 +102,27 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
         return ResultData.success();
     }
 
+
+    /**
+     * 开通视频监控
+     *
+     * @param uuid 登录ID
+     * @return 开通视频监控
+     */
+    public ResultData realPlay(String uuid) {
+        return realPlay(uuid, false, null);
+    }
+
+
     /**
      * 开启预览
      *
-     * @param uuid 登录ID
-     * @return 结果
+     * @param uuid              登录ID
+     * @param fRealDataCallBack 视频流
+     * @return 开启预览
      */
     @Override
-    public ResultData realPlay(String uuid, boolean needCallBack) {
+    public ResultData realPlay(String uuid, boolean needCallBack, HCNetSDK.FRealDataCallBack_V30 fRealDataCallBack) {
 
         // 开启预览
         int lPlay;
@@ -126,7 +137,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
             // ，7- RTSP/HTTPS，8- NPQ
             strClientInfo.bBlocked = 1;
             strClientInfo.write();
-            fRealDataCallBackMap.put(uuid, new FRealDataCallBack());
+            fRealDataCallBackMap.put(uuid, new FRealDataCallBack(playControl, m_lPort));
             lPlay =
                     hCNetSDK.NET_DVR_RealPlay_V40(
                             lUserIDMap.get(uuid),
@@ -176,7 +187,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
     public ResultData saveRealData(String uuid, String filePath, long duration) {
         try {
             if (lPlayMap.get(uuid) == null) {
-                realPlay(uuid, false);
+                realPlay(uuid);
             }
             hCNetSDK.NET_DVR_SaveRealData(lPlayMap.get(uuid), filePath);
             log.debug("保存录像，录像地址{}，时长{}", filePath, (Object) duration);
@@ -203,7 +214,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
     public ResultData timedSnapshot(String uuid, String filePath, long duration) {
         try {
             if (lPlayMap.get(uuid) == null) {
-                realPlay(uuid, false);
+                realPlay(uuid);
             }
             int lUserID = lUserIDMap.get(uuid);
             Byte channel = channelMap.get(uuid);
@@ -237,46 +248,4 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
         return ResultData.success();
     }
 
-    static class FRealDataCallBack implements HCNetSDK.FRealDataCallBack_V30 {
-        // 预览回调
-        public void invoke(
-                int lRealHandle,
-                int dwDataType,
-                ByteByReference pBuffer,
-                int dwBufSize,
-                Pointer pUser) {
-            // 播放库解码
-            switch (dwDataType) {
-                case HCNetSDK.NET_DVR_SYSHEAD: // 系统头
-                    if (!playControl.PlayM4_GetPort(m_lPort)) // 获取播放库未使用的通道号
-                    {
-                        break;
-                    }
-                    if (dwBufSize > 0) {
-                        if (!playControl.PlayM4_SetStreamOpenMode(
-                                m_lPort.getValue(), PlayCtrl.STREAME_REALTIME)) // 设置实时流播放模式
-                        {
-                            break;
-                        }
-                        if (!playControl.PlayM4_OpenStream(
-                                m_lPort.getValue(), pBuffer, dwBufSize, 1024 * 1024)) // 打开流接口
-                        {
-                            break;
-                        }
-                        if (!playControl.PlayM4_Play(m_lPort.getValue(), null)) // 播放开始
-                        {
-                            break;
-                        }
-                    }
-                case HCNetSDK.NET_DVR_STREAMDATA: // 码流数据
-                    if ((dwBufSize > 0) && (m_lPort.getValue() != -1)) {
-                        if (!playControl.PlayM4_InputData(
-                                m_lPort.getValue(), pBuffer, dwBufSize)) // 输入流数据
-                        {
-                            break;
-                        }
-                    }
-            }
-        }
-    }
 }
