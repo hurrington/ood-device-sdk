@@ -30,7 +30,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
      */
     private String logPath;
     //默认超时时间
-    private final long DEFAULT_TIMEOUT = 10 * 1000L;
+    private static final long DEFAULT_TIMEOUT = 10 * 1000L;
 
     public HikWebcamClient() {
     }
@@ -51,10 +51,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
      */
     @Override
     public boolean isInit() {
-        if (hCNetSDK != null) {
-            return true;
-        }
-        return false;
+        return hCNetSDK != null;
     }
 
     /**
@@ -203,15 +200,14 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
     }
 
     /**
-     * 定时抓拍
+     * 抓拍
      *
      * @param uuid     设备登录ID
      * @param filePath 文件路径
-     * @param duration 抓拍间隔
      * @return 定时抓拍
      */
     @Override
-    public ResultData timedSnapshot(String uuid, String filePath, long duration) {
+    public ResultData snapshot(String uuid, String filePath) {
         try {
             if (lPlayMap.get(uuid) == null) {
                 realPlay(uuid);
@@ -226,7 +222,7 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
                 // 返回Boolean值，判断是否获取设备能力
                 log.info("hksdk(抓图)-返回设备状态失败");
             }
-            log.info("准备拍照，userId:[{}],startChan:[{}],时间：[{}]", (Object) lUserID, channel, DateUtil.now());
+            log.info("准备拍照，userId:[{}],startChan:[{}],时间：[{}]", lUserID, channel, DateUtil.now());
             // 图片质量
             HCNetSDK.NET_DVR_JPEGPARA jpeg = new HCNetSDK.NET_DVR_JPEGPARA();
             // 设置图片分辨率
@@ -236,16 +232,13 @@ public class HikWebcamClient extends AbstractHikDevice implements IHikWebcamClie
             boolean res =
                     hCNetSDK.NET_DVR_CaptureJPEGPicture(
                             lUserID, channel, jpeg, filePath.getBytes(StandardCharsets.UTF_8));
-            log.debug("保存录像，录像地址{}，时长{}", filePath, (Object) duration);
-            //暂停线程，相当于录制时长'
-            Thread.sleep(ObjectUtil.defaultIfNull(duration, DEFAULT_TIMEOUT));
+            log.debug("保存抓拍，地址{}", filePath);
+            return res ? ResultData.success() : ResultData.error();
         } catch (Exception e) {
             log.error("保存录像异常");
             return ResultData.error();
-        } finally {
-            hCNetSDK.NET_DVR_StopSaveRealData(lPlayMap.get(uuid));
         }
-        return ResultData.success();
+
     }
 
 }

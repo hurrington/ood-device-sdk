@@ -78,12 +78,11 @@ public interface IHikWebcamClient extends IHikDevice {
 	ResultData saveRealData(String uuid, String filePath, long duration);
 
 	/**
-	 * 定时抓拍
+	 * 抓拍
 	 *
-	 * @param uuid 设备登录ID
+	 * @param uuid     设备登录ID
 	 * @param filePath 文件路径
-	 * @param duration 抓拍间隔
 	 * @return 结果
 	 */
-	ResultData timedSnapshot(String uuid, String filePath, long duration);
+	ResultData snapshot(String uuid, String filePath);
 }

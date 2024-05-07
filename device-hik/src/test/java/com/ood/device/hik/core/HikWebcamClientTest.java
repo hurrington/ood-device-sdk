@@ -51,13 +51,13 @@ public class HikWebcamClientTest {
     }
 
     /**
-     * 定时抓拍
+     * 抓拍
      */
     @Test
     @Ignore
-    public void timedSnapshot(){
+    public void snapshot(){
         String filePath = "C:\\Users\\dbg\\Desktop\\testHik.jpeg";
-        ResultData resultData = webcamClient.timedSnapshot(login, filePath, 11*1000L);
+        ResultData resultData = webcamClient.snapshot(login, filePath);
         webcamClient.stopRealPlay(login);
         Assert.assertTrue("定时抓拍",resultData.isSuccess());
     }
